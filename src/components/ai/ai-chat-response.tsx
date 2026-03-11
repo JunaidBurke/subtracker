@@ -13,39 +13,28 @@ export function AIChatResponse({ response, onDismiss }: AIChatResponseProps) {
     <AnimatePresence>
       {response && (
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 16 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="relative w-full rounded-2xl border border-purple-500/30 bg-white/5 p-5 backdrop-blur-xl shadow-[var(--shadow-glass)]"
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="relative w-full rounded-xl border border-border-accent bg-surface-raised p-5 shadow-[var(--shadow-accent)]"
         >
-          <div
-            className="pointer-events-none absolute inset-0 rounded-2xl opacity-60"
-            style={{
-              background:
-                'linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-purple))',
-              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-              maskComposite: 'exclude',
-              WebkitMaskComposite: 'xor',
-              padding: '1px',
-            }}
-          />
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-purple-400" />
-              <span className="text-xs font-medium text-purple-300">
+              <Sparkles className="h-4 w-4 text-accent" />
+              <span className="text-xs font-medium text-accent">
                 AI Response
               </span>
             </div>
             <button
               onClick={onDismiss}
-              className="rounded-full p-1 text-white/40 transition-colors hover:bg-white/10 hover:text-white/70"
+              className="rounded-md p-1 text-text-tertiary transition-colors hover:bg-surface-overlay hover:text-text-secondary"
               aria-label="Dismiss response"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-white/80">
+          <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-secondary">
             {response}
           </p>
         </motion.div>

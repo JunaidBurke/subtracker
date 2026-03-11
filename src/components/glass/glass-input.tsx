@@ -17,7 +17,7 @@ export const GlassInput = forwardRef<HTMLInputElement, GlassInputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm text-white/60 font-medium"
+            className="text-sm text-text-secondary font-medium"
           >
             {label}
           </label>
@@ -26,12 +26,12 @@ export const GlassInput = forwardRef<HTMLInputElement, GlassInputProps>(
           ref={ref}
           id={inputId}
           className={[
-            'w-full rounded-xl px-4 py-3 backdrop-blur-sm',
-            'bg-white/5 border text-white placeholder:text-white/40',
+            'w-full rounded-lg px-4 py-3',
+            'bg-surface-overlay border text-text-primary placeholder:text-text-tertiary',
             'transition-all duration-200 outline-none',
             error
-              ? 'border-red-500/30 ring-2 ring-red-500/50'
-              : 'border-white/10 focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/50',
+              ? 'border-status-danger/40 ring-1 ring-status-danger/30'
+              : 'border-border focus:border-accent/40 focus:ring-1 focus:ring-accent/30',
             className,
           ]
             .filter(Boolean)
@@ -39,7 +39,7 @@ export const GlassInput = forwardRef<HTMLInputElement, GlassInputProps>(
           {...props}
         />
         {error && (
-          <p className="text-xs text-red-400 mt-0.5">{error}</p>
+          <p className="text-xs text-status-danger mt-0.5">{error}</p>
         )}
       </div>
     )

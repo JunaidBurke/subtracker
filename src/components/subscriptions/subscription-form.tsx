@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import { GlassInput } from '@/components/glass/glass-input'
 import { GlassButton } from '@/components/glass/glass-button'
 import { SmartEntry } from '@/components/subscriptions/smart-entry'
+import { DEFAULT_CATEGORY_OPTIONS } from '@/lib/constants/subscriptions'
 import type { Subscription, BillingCycle, SubscriptionStatus } from '@/types'
 
 interface SubscriptionFormData {
@@ -28,16 +29,11 @@ interface SubscriptionFormProps {
   loading?: boolean
 }
 
-const categories = [
-  'Streaming', 'Music', 'Productivity', 'Cloud',
-  'Gaming', 'Fitness', 'News', 'Other',
-]
-
 const selectClasses = [
-  'w-full rounded-xl px-4 py-3 backdrop-blur-sm',
-  'bg-white/5 border border-white/10 text-white',
+  'w-full rounded-lg px-4 py-3',
+  'bg-surface-overlay border border-border text-text-primary',
   'transition-all duration-200 outline-none',
-  'focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/50',
+  'focus:border-accent/40 focus:ring-1 focus:ring-accent/30',
 ].join(' ')
 
 export function SubscriptionForm({
@@ -131,10 +127,10 @@ function TabButton({
       type="button"
       onClick={onClick}
       className={[
-        'min-h-[44px] px-4 py-2 rounded-xl text-sm font-medium transition-all',
+        'min-h-[44px] px-4 py-2 rounded-lg text-sm font-medium transition-all',
         active
-          ? 'bg-white/10 text-white border border-white/20'
-          : 'text-white/50 hover:text-white/80',
+          ? 'bg-surface-subtle text-text-primary border border-border'
+          : 'text-text-tertiary hover:text-text-secondary',
       ].join(' ')}
     >
       {children}
@@ -159,30 +155,34 @@ function ManualFields({
       />
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm text-white/60 font-medium">Category</label>
+          <label className="text-sm text-text-secondary font-medium">Category</label>
           <select
             className={selectClasses}
             value={form.category}
             onChange={(e) => update('category', e.target.value)}
           >
-            {categories.map((c) => (
-              <option key={c} value={c.toLowerCase()} className="bg-gray-900">
-                {c}
+            {DEFAULT_CATEGORY_OPTIONS.map((category) => (
+              <option
+                key={category.value}
+                value={category.value}
+                className="bg-surface-raised"
+              >
+                {category.label}
               </option>
             ))}
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm text-white/60 font-medium">Status</label>
+          <label className="text-sm text-text-secondary font-medium">Status</label>
           <select
             className={selectClasses}
             value={form.status}
             onChange={(e) => update('status', e.target.value as SubscriptionStatus)}
           >
-            <option value="active" className="bg-gray-900">Active</option>
-            <option value="paused" className="bg-gray-900">Paused</option>
-            <option value="trial" className="bg-gray-900">Trial</option>
-            <option value="cancelled" className="bg-gray-900">Cancelled</option>
+            <option value="active" className="bg-surface-raised">Active</option>
+            <option value="paused" className="bg-surface-raised">Paused</option>
+            <option value="trial" className="bg-surface-raised">Trial</option>
+            <option value="cancelled" className="bg-surface-raised">Cancelled</option>
           </select>
         </div>
       </div>
@@ -197,29 +197,29 @@ function ManualFields({
           required
         />
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm text-white/60 font-medium">Currency</label>
+          <label className="text-sm text-text-secondary font-medium">Currency</label>
           <select
             className={selectClasses}
             value={form.currency}
             onChange={(e) => update('currency', e.target.value)}
           >
-            <option value="USD" className="bg-gray-900">USD</option>
-            <option value="EUR" className="bg-gray-900">EUR</option>
-            <option value="GBP" className="bg-gray-900">GBP</option>
-            <option value="CAD" className="bg-gray-900">CAD</option>
+            <option value="USD" className="bg-surface-raised">USD</option>
+            <option value="EUR" className="bg-surface-raised">EUR</option>
+            <option value="GBP" className="bg-surface-raised">GBP</option>
+            <option value="CAD" className="bg-surface-raised">CAD</option>
           </select>
         </div>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm text-white/60 font-medium">Billing Cycle</label>
+        <label className="text-sm text-text-secondary font-medium">Billing Cycle</label>
         <select
           className={selectClasses}
           value={form.billing_cycle}
           onChange={(e) => update('billing_cycle', e.target.value as BillingCycle)}
         >
-          <option value="weekly" className="bg-gray-900">Weekly</option>
-          <option value="monthly" className="bg-gray-900">Monthly</option>
-          <option value="yearly" className="bg-gray-900">Yearly</option>
+          <option value="weekly" className="bg-surface-raised">Weekly</option>
+          <option value="monthly" className="bg-surface-raised">Monthly</option>
+          <option value="yearly" className="bg-surface-raised">Yearly</option>
         </select>
       </div>
       <div className="grid grid-cols-2 gap-4">
@@ -245,7 +245,7 @@ function ManualFields({
         placeholder="e.g. Visa ending 4242"
       />
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm text-white/60 font-medium">Notes</label>
+        <label className="text-sm text-text-secondary font-medium">Notes</label>
         <textarea
           className={[selectClasses, 'resize-none min-h-[80px]'].join(' ')}
           value={form.notes}
@@ -258,9 +258,9 @@ function ManualFields({
           type="checkbox"
           checked={form.auto_renew}
           onChange={(e) => update('auto_renew', e.target.checked)}
-          className="h-5 w-5 rounded border-white/20 bg-white/5 accent-blue-500"
+          className="h-5 w-5 rounded border-border bg-surface-overlay accent-accent"
         />
-        <span className="text-sm text-white/70">Auto-renew</span>
+        <span className="text-sm text-text-secondary">Auto-renew</span>
       </label>
     </div>
   )

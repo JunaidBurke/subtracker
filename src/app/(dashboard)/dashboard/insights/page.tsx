@@ -20,7 +20,7 @@ export default function InsightsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-white">AI Insights</h1>
+      <h1 className="font-display text-2xl text-text-primary">AI Insights</h1>
 
       <div className="flex flex-wrap gap-2">
         {filterTabs.map((tab) => (
@@ -29,10 +29,10 @@ export default function InsightsPage() {
             type="button"
             onClick={() => setActiveFilter(tab.value)}
             className={[
-              'min-h-[44px] px-4 py-2 rounded-full text-sm font-medium transition-all',
+              'min-h-[44px] px-4 py-2 rounded-lg text-sm font-medium transition-all',
               activeFilter === tab.value
-                ? 'bg-white/15 text-white border border-white/20'
-                : 'bg-white/5 text-white/50 hover:text-white/80 border border-transparent',
+                ? 'bg-surface-subtle text-text-primary border border-border'
+                : 'bg-transparent text-text-tertiary hover:text-text-secondary border border-transparent',
             ].join(' ')}
           >
             {tab.label}
@@ -68,12 +68,12 @@ function SkeletonCards() {
       {Array.from({ length: 3 }).map((_, i) => (
         <GlassCard key={i} hover={false}>
           <div className="animate-pulse flex items-start gap-4">
-            <div className="h-10 w-10 rounded-xl bg-white/10 shrink-0" />
+            <div className="h-10 w-10 rounded-lg bg-surface-subtle shrink-0" />
             <div className="flex-1 space-y-3">
-              <div className="h-5 w-24 rounded bg-white/10" />
-              <div className="h-4 w-48 rounded bg-white/10" />
-              <div className="h-3 w-full rounded bg-white/10" />
-              <div className="h-3 w-2/3 rounded bg-white/10" />
+              <div className="h-5 w-24 rounded bg-surface-subtle" />
+              <div className="h-4 w-48 rounded bg-surface-subtle" />
+              <div className="h-3 w-full rounded bg-surface-subtle" />
+              <div className="h-3 w-2/3 rounded bg-surface-subtle" />
             </div>
           </div>
         </GlassCard>
@@ -86,11 +86,11 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
   return (
     <GlassCard hover={false}>
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <p className="mb-4 text-sm text-red-400">{message}</p>
+        <p className="mb-4 text-sm text-status-danger">{message}</p>
         <button
           type="button"
           onClick={onRetry}
-          className="min-h-[44px] rounded-xl border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium text-white/70 transition-all hover:bg-white/10 hover:text-white"
+          className="min-h-[44px] rounded-lg border border-border bg-surface-overlay px-6 py-2 text-sm font-medium text-text-secondary transition-all hover:bg-surface-subtle hover:text-text-primary"
         >
           Retry
         </button>
@@ -102,7 +102,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
 function EmptyState() {
   return (
     <GlassCard hover={false}>
-      <div className="flex flex-col items-center justify-center py-12 text-white/40">
+      <div className="flex flex-col items-center justify-center py-12 text-text-tertiary">
         <Sparkles className="h-10 w-10 mb-4 opacity-50" />
         <p className="text-sm text-center max-w-xs">
           No insights yet. AI will analyze your subscriptions and provide

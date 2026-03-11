@@ -1,54 +1,50 @@
 @import "tailwindcss";
 
-/* ─── Liquid Glass Design Tokens ─── */
+/* ─── Noir Finance Design Tokens ─── */
 @theme inline {
   /* Fonts */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "DM Sans", "Inter", "Segoe UI", sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
 
-  /* Base colors */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Surface palette — warm charcoal spectrum */
+  --color-surface-base: #050505;
+  --color-surface-raised: #0c0c0c;
+  --color-surface-overlay: #141414;
+  --color-surface-subtle: #1a1a1a;
 
-  /* Glass backgrounds */
-  --color-glass-bg: rgba(255, 255, 255, 0.1);
-  --color-glass-bg-light: rgba(255, 255, 255, 0.05);
-  --color-glass-bg-heavy: rgba(255, 255, 255, 0.15);
-  --color-glass-border: rgba(255, 255, 255, 0.2);
-  --color-glass-border-light: rgba(255, 255, 255, 0.1);
+  /* Text — warm off-whites */
+  --color-text-primary: #e8e0d4;
+  --color-text-secondary: #a39885;
+  --color-text-tertiary: #6b6259;
+  --color-text-muted: #3d3730;
 
-  /* Accent gradient endpoints */
-  --color-accent-blue: #3b82f6;
-  --color-accent-purple: #8b5cf6;
-  --color-accent-blue-light: #60a5fa;
-  --color-accent-purple-light: #a78bfa;
+  /* Accent — warm gold */
+  --color-accent: #c9a96e;
+  --color-accent-hover: #dbbe84;
+  --color-accent-muted: rgba(201, 169, 110, 0.15);
+  --color-accent-glow: rgba(201, 169, 110, 0.08);
 
-  /* Surface colors for dark theme */
-  --color-surface-base: #0b1120;
-  --color-surface-raised: #111827;
-  --color-surface-overlay: #1e293b;
+  /* Status — muted, warm tones */
+  --color-status-active: #7a8a6e;
+  --color-status-warning: #d4a574;
+  --color-status-danger: #c45d4f;
+  --color-status-info: #7a9ab5;
 
-  /* Status colors */
-  --color-status-active: #22c55e;
-  --color-status-warning: #f59e0b;
-  --color-status-danger: #ef4444;
-  --color-status-info: #3b82f6;
+  /* Borders */
+  --color-border: #1a1a1a;
+  --color-border-light: #111111;
+  --color-border-accent: rgba(201, 169, 110, 0.2);
 
-  /* Glass shadows */
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  --shadow-glass-sm: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --shadow-glass-lg: 0 16px 48px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  --shadow-glow: 0 0 24px rgba(59, 130, 246, 0.3);
-
-  /* Backdrop blur values */
-  --blur-glass: 16px;
-  --blur-glass-lg: 24px;
-  --blur-glass-xl: 40px;
+  /* Shadows — subtle, warm */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-accent: 0 0 20px rgba(201, 169, 110, 0.06);
 }
 
 :root {
-  --background: #0b1120;
-  --foreground: #e2e8f0;
+  --background: #050505;
+  --foreground: #e8e0d4;
 }
 
 body {
@@ -57,10 +53,37 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* ─── Landing Page Animations ─── */
-@keyframes drift {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(30px, -40px); }
-  50% { transform: translate(-20px, 20px); }
-  75% { transform: translate(40px, 30px); }
+/* ─── Grain Texture Overlay ─── */
+.grain-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ─── Scrollbar Styling ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2a2a2a;
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: rgba(201, 169, 110, 0.2);
+  color: #e8e0d4;
 }

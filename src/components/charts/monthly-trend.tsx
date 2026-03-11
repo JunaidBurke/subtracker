@@ -32,9 +32,9 @@ function CustomTooltip({
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 backdrop-blur-xl">
-      <p className="text-sm font-medium text-white">{label}</p>
-      <p className="text-sm text-white/70">
+    <div className="rounded-lg border border-border bg-surface-raised px-4 py-2">
+      <p className="text-sm font-medium text-text-primary">{label}</p>
+      <p className="text-sm text-accent">
         ${payload[0].value.toFixed(2)}
       </p>
     </div>
@@ -60,10 +60,10 @@ export function MonthlyTrend({ subscriptions }: MonthlyTrendProps) {
   if (subscriptions.filter((s) => s.status === 'active').length === 0) {
     return (
       <GlassCard hover={false}>
-        <h3 className="mb-4 text-lg font-semibold text-white">
+        <h3 className="mb-4 font-display text-lg text-text-primary">
           Monthly Trend
         </h3>
-        <p className="text-sm text-white/50">
+        <p className="text-sm text-text-tertiary">
           No active subscriptions to display.
         </p>
       </GlassCard>
@@ -72,33 +72,33 @@ export function MonthlyTrend({ subscriptions }: MonthlyTrendProps) {
 
   return (
     <GlassCard hover={false}>
-      <h3 className="mb-4 text-lg font-semibold text-white">Monthly Trend</h3>
+      <h3 className="mb-4 font-display text-lg text-text-primary">Monthly Trend</h3>
       <ResponsiveContainer width="100%" height={280}>
         <AreaChart data={data}>
           <defs>
             <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6366f1" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.05} />
+              <stop offset="0%" stopColor="#c9a96e" stopOpacity={0.2} />
+              <stop offset="100%" stopColor="#c9a96e" stopOpacity={0.02} />
             </linearGradient>
           </defs>
           <XAxis
             dataKey="month"
             axisLine={false}
             tickLine={false}
-            tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }}
+            tick={{ fill: '#6b6259', fontSize: 12 }}
           />
           <YAxis
             axisLine={false}
             tickLine={false}
-            tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }}
+            tick={{ fill: '#6b6259', fontSize: 12 }}
             tickFormatter={(v: number) => `$${v}`}
           />
           <Tooltip content={<CustomTooltip />} />
           <Area
             type="monotone"
             dataKey="amount"
-            stroke="#8b5cf6"
-            strokeWidth={2}
+            stroke="#c9a96e"
+            strokeWidth={1.5}
             fill="url(#trendGradient)"
           />
         </AreaChart>

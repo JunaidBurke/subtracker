@@ -4,6 +4,8 @@ import { z } from 'zod'
 import { updateSubscriptionSchema } from '@/validators/subscription'
 import {
   getSubscriptionById,
+  getPriceHistoryBySubscriptionId,
+  getInsightsBySubscriptionId,
   updateSubscription,
   deleteSubscription,
 } from '@/lib/supabase/queries'
@@ -19,8 +21,17 @@ export async function GET(
     }
 
     const { id } = await params
-    const data = await getSubscriptionById(userId, id)
-    return NextResponse.json(data)
+    const subscription = await getSubscriptionById(userId, id)
+    const [price_history, related_insights] = await Promise.all([
+      getPriceHistoryBySubscriptionId(subscription.id),
+      getInsightsBySubscriptionId(userId, subscription.id),
+    ])
+
+    return NextResponse.json({
+      subscription,
+      price_history,
+      related_insights,
+    })
   } catch (error) {
     console.error('[subscription-get]', error)
     return NextResponse.json({ error: 'Not found' }, { status: 404 })

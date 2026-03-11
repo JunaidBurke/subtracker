@@ -22,7 +22,7 @@ export function NotificationList({
 }: NotificationListProps) {
   if (notifications.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-10 text-white/40">
+      <div className="flex flex-col items-center justify-center py-10 text-text-tertiary">
         <Bell className="h-8 w-8 mb-3 opacity-50" />
         <p className="text-sm">No notifications yet</p>
       </div>
@@ -49,18 +49,18 @@ export function NotificationList({
               className={[
                 'flex items-start gap-3 w-full px-4 py-3 text-left',
                 'transition-colors duration-150 cursor-pointer',
-                'hover:bg-white/[0.06] min-h-[44px]',
+                'hover:bg-surface-overlay min-h-[44px]',
                 notification.is_read
                   ? 'bg-transparent'
-                  : 'bg-white/[0.04]',
+                  : 'bg-surface-overlay/50',
               ].join(' ')}
             >
               <div
                 className={[
-                  'mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
+                  'mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md',
                   notification.is_read
-                    ? 'bg-white/[0.06] text-white/40'
-                    : 'bg-blue-500/20 text-blue-400',
+                    ? 'bg-surface-subtle text-text-tertiary'
+                    : 'bg-accent/15 text-accent',
                 ].join(' ')}
               >
                 <Icon className="h-4 w-4" />
@@ -69,18 +69,18 @@ export function NotificationList({
                 <p
                   className={[
                     'text-sm font-medium truncate',
-                    notification.is_read ? 'text-white/50' : 'text-white',
+                    notification.is_read ? 'text-text-tertiary' : 'text-text-primary',
                   ].join(' ')}
                 >
                   {notification.title}
                 </p>
-                <p className="text-xs text-white/40 line-clamp-2 mt-0.5">
+                <p className="text-xs text-text-tertiary line-clamp-2 mt-0.5">
                   {notification.body}
                 </p>
-                <p className="text-[11px] text-white/30 mt-1">{timeAgo}</p>
+                <p className="text-[11px] text-text-muted mt-1">{timeAgo}</p>
               </div>
               {!notification.is_read && (
-                <div className="mt-2 h-2 w-2 shrink-0 rounded-full bg-blue-500" />
+                <div className="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent" />
               )}
             </button>
           </li>

@@ -42,10 +42,10 @@ export function InsightCard({ insight, onDismiss, onMarkRead }: InsightCardProps
       <div className="flex items-start gap-4">
         <div
           className={[
-            'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg',
             !insight.is_read
-              ? 'bg-blue-500/20 text-blue-400'
-              : 'bg-white/[0.06] text-white/40',
+              ? 'bg-accent/15 text-accent'
+              : 'bg-surface-subtle text-text-tertiary',
           ].join(' ')}
         >
           <Icon className="h-5 w-5" />
@@ -56,14 +56,14 @@ export function InsightCard({ insight, onDismiss, onMarkRead }: InsightCardProps
             <GlassBadge variant={badgeVariantByType[insight.type]}>
               {labelByType[insight.type]}
             </GlassBadge>
-            <span className="text-[11px] text-white/30">{timeAgo}</span>
+            <span className="text-[11px] text-text-muted">{timeAgo}</span>
           </div>
 
-          <h3 className="text-sm font-semibold text-white">{insight.title}</h3>
-          <p className="text-sm text-white/60 leading-relaxed">{insight.body}</p>
+          <h3 className="text-sm font-semibold text-text-primary">{insight.title}</h3>
+          <p className="text-sm text-text-secondary leading-relaxed">{insight.body}</p>
 
           {insight.related_subscription_ids.length > 0 && (
-            <p className="text-xs text-white/30">
+            <p className="text-xs text-text-muted">
               Related subscriptions: {insight.related_subscription_ids.length}
             </p>
           )}

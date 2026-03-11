@@ -18,38 +18,25 @@ export function GlassCard({
 }: GlassCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
+      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       whileHover={
         hover
-          ? { scale: 1.02, boxShadow: 'var(--shadow-glass-lg)' }
+          ? { boxShadow: 'var(--shadow-lg)' }
           : undefined
       }
       className={[
-        'relative rounded-2xl border p-6 backdrop-blur-xl',
-        'bg-white/5 border-white/10',
-        'shadow-[var(--shadow-glass)]',
-        'transition-colors duration-200',
-        glow && 'glass-glow',
+        'relative rounded-xl border p-6',
+        'bg-surface-raised border-border',
+        'shadow-[var(--shadow-sm)]',
+        'transition-colors duration-300',
+        glow && 'border-border-accent shadow-[var(--shadow-accent)]',
         className,
       ]
         .filter(Boolean)
         .join(' ')}
     >
-      {glow && (
-        <div
-          className="pointer-events-none absolute inset-0 rounded-2xl opacity-60"
-          style={{
-            background:
-              'linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-purple))',
-            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-            maskComposite: 'exclude',
-            WebkitMaskComposite: 'xor',
-            padding: '1px',
-          }}
-        />
-      )}
       {children}
     </motion.div>
   )

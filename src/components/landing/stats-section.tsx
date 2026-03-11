@@ -12,19 +12,19 @@ export function StatsSection() {
   return (
     <section className="mx-auto max-w-4xl px-4 pb-24">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: '-50px' }}
-        transition={{ duration: 0.5 }}
-        className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl shadow-[var(--shadow-glass)]"
+        transition={{ duration: 0.6 }}
+        className="flex justify-center"
       >
-        <div className="grid gap-8 sm:grid-cols-3">
+        <div className="grid w-full gap-px sm:grid-cols-3 border border-border rounded-xl overflow-hidden bg-border">
           {stats.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-2xl font-bold text-transparent">
+            <div key={stat.label} className="bg-surface-raised px-8 py-10 text-center">
+              <p className="font-display text-2xl text-accent italic">
                 {stat.value}
               </p>
-              <p className="mt-1 text-sm text-white/50">{stat.label}</p>
+              <p className="mt-2 text-sm text-text-tertiary">{stat.label}</p>
             </div>
           ))}
         </div>

@@ -6,14 +6,14 @@ import { spendByCategory } from '@/lib/utils/spend'
 import type { Subscription } from '@/types'
 
 const COLORS = [
-  '#6366f1', // indigo
-  '#8b5cf6', // violet
-  '#06b6d4', // cyan
-  '#14b8a6', // teal
-  '#ec4899', // pink
-  '#f59e0b', // amber
-  '#10b981', // emerald
-  '#3b82f6', // blue
+  '#c9a96e', // gold
+  '#7a8a6e', // sage
+  '#7a9ab5', // steel blue
+  '#d4a574', // warm amber
+  '#a3816a', // clay
+  '#8b7a6e', // stone
+  '#6b8a7a', // fern
+  '#9a8a7a', // driftwood
 ]
 
 interface SpendDonutProps {
@@ -37,9 +37,9 @@ function CustomTooltip({
 
   const item = payload[0]
   return (
-    <div className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 backdrop-blur-xl">
-      <p className="text-sm font-medium text-white">{item.name}</p>
-      <p className="text-sm text-white/70">
+    <div className="rounded-lg border border-border bg-surface-raised px-4 py-2">
+      <p className="text-sm font-medium text-text-primary">{item.name}</p>
+      <p className="text-sm text-accent">
         ${item.value.toFixed(2)}/mo
       </p>
     </div>
@@ -56,10 +56,10 @@ export function SpendDonut({ subscriptions }: SpendDonutProps) {
   if (data.length === 0) {
     return (
       <GlassCard hover={false}>
-        <h3 className="mb-4 text-lg font-semibold text-white">
+        <h3 className="mb-4 font-display text-lg text-text-primary">
           Spend by Category
         </h3>
-        <p className="text-sm text-white/50">
+        <p className="text-sm text-text-tertiary">
           No active subscriptions to display.
         </p>
       </GlassCard>
@@ -68,7 +68,7 @@ export function SpendDonut({ subscriptions }: SpendDonutProps) {
 
   return (
     <GlassCard hover={false}>
-      <h3 className="mb-4 text-lg font-semibold text-white">
+      <h3 className="mb-4 font-display text-lg text-text-primary">
         Spend by Category
       </h3>
       <ResponsiveContainer width="100%" height={280}>
@@ -96,7 +96,7 @@ export function SpendDonut({ subscriptions }: SpendDonutProps) {
             verticalAlign="bottom"
             iconType="circle"
             formatter={(value: string) => (
-              <span className="text-xs text-white/70">{value}</span>
+              <span className="text-xs text-text-secondary">{value}</span>
             )}
           />
         </PieChart>

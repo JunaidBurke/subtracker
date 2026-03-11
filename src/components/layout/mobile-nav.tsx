@@ -26,7 +26,7 @@ export function MobileNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-white/[0.08] bg-surface-base/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border bg-surface-base/95 pb-[env(safe-area-inset-bottom)]">
       <div className="flex items-center justify-around h-16">
         {tabs.map((tab) => {
           const isActive =
@@ -41,8 +41,8 @@ export function MobileNav() {
                 'flex flex-col items-center justify-center gap-1 min-w-[64px] min-h-[44px]',
                 'text-xs transition-colors duration-200',
                 isActive
-                  ? 'text-blue-400'
-                  : 'text-white/40 hover:text-white/60',
+                  ? 'text-accent'
+                  : 'text-text-tertiary hover:text-text-secondary',
               ].join(' ')}
             >
               <tab.icon className="h-5 w-5" />

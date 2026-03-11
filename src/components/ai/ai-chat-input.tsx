@@ -30,17 +30,17 @@ export function AIChatInput({ onSubmit, loading = false }: AIChatInputProps) {
     <form onSubmit={handleSubmit} className="w-full">
       <div
         className={[
-          'flex items-center gap-3 rounded-full border px-4 py-3',
-          'bg-white/5 backdrop-blur-xl',
-          'border-white/10',
-          'shadow-[var(--shadow-glass)]',
+          'flex items-center gap-3 rounded-lg border px-4 py-3',
+          'bg-surface-raised',
+          'border-border',
+          'shadow-[var(--shadow-sm)]',
           'transition-all duration-300',
-          loading && 'animate-pulse border-purple-500/40 shadow-purple-500/20',
+          loading && 'animate-pulse border-accent/30',
         ]
           .filter(Boolean)
           .join(' ')}
       >
-        <Sparkles className="h-5 w-5 shrink-0 text-purple-400" />
+        <Sparkles className="h-5 w-5 shrink-0 text-accent" />
         <input
           type="text"
           value={value}
@@ -48,12 +48,12 @@ export function AIChatInput({ onSubmit, loading = false }: AIChatInputProps) {
           onKeyDown={handleKeyDown}
           placeholder="Ask about your subscriptions..."
           disabled={loading}
-          className="min-w-0 flex-1 bg-transparent text-sm text-white placeholder-white/40 outline-none disabled:opacity-50"
+          className="min-w-0 flex-1 bg-transparent text-sm text-text-primary placeholder-text-tertiary outline-none disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={!value.trim() || loading}
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-500/20 text-purple-300 transition-colors hover:bg-purple-500/30 disabled:opacity-30 disabled:hover:bg-purple-500/20"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent/15 text-accent transition-colors hover:bg-accent/25 disabled:opacity-30 disabled:hover:bg-accent/15"
           aria-label="Send question"
         >
           <Send className="h-4 w-4" />

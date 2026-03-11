@@ -105,12 +105,12 @@ export function SmartEntry({ onParsed }: SmartEntryProps) {
         onDragLeave={() => setDragOver(false)}
         onClick={() => !imagePreview && fileInputRef.current?.click()}
         className={[
-          'relative flex flex-col items-center justify-center rounded-2xl',
+          'relative flex flex-col items-center justify-center rounded-xl',
           'border-2 border-dashed p-8 text-center cursor-pointer',
-          'backdrop-blur-sm transition-all duration-200',
+          'transition-all duration-200',
           dragOver
-            ? 'border-blue-400/50 bg-blue-500/10'
-            : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8',
+            ? 'border-accent/50 bg-accent/5'
+            : 'border-border bg-surface-overlay hover:border-border-accent hover:bg-surface-subtle',
         ].join(' ')}
       >
         <input
@@ -123,7 +123,7 @@ export function SmartEntry({ onParsed }: SmartEntryProps) {
 
         {imagePreview ? (
           <div className="space-y-3 w-full">
-            <div className="flex items-center gap-2 text-white/60 text-sm">
+            <div className="flex items-center gap-2 text-text-secondary text-sm">
               <ImageIcon className="h-4 w-4" />
               <span>Image uploaded</span>
             </div>
@@ -136,18 +136,18 @@ export function SmartEntry({ onParsed }: SmartEntryProps) {
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); clearImage() }}
-              className="text-xs text-white/40 hover:text-white/60 transition-colors"
+              className="text-xs text-text-tertiary hover:text-text-secondary transition-colors"
             >
               Remove image
             </button>
           </div>
         ) : (
           <>
-            <Upload className="h-10 w-10 text-white/30 mb-3" />
-            <p className="text-white/50 text-sm">
+            <Upload className="h-10 w-10 text-text-muted mb-3" />
+            <p className="text-text-tertiary text-sm">
               Drag & drop a receipt screenshot
             </p>
-            <p className="text-white/30 text-xs mt-1">
+            <p className="text-text-muted text-xs mt-1">
               PNG, JPG, or WebP
             </p>
           </>
@@ -156,24 +156,24 @@ export function SmartEntry({ onParsed }: SmartEntryProps) {
 
       {/* Divider */}
       <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-white/10" />
-        <span className="text-xs text-white/30">or paste text</span>
-        <div className="flex-1 h-px bg-white/10" />
+        <div className="flex-1 h-px bg-border" />
+        <span className="text-xs text-text-muted">or paste text</span>
+        <div className="flex-1 h-px bg-border" />
       </div>
 
       {/* Text input */}
       <div className="relative">
-        <FileText className="absolute left-3 top-3 h-4 w-4 text-white/30" />
+        <FileText className="absolute left-3 top-3 h-4 w-4 text-text-muted" />
         <textarea
           value={receiptText}
           onChange={(e) => setReceiptText(e.target.value)}
           placeholder="Paste receipt or confirmation email text..."
           disabled={!!imageBase64}
           className={[
-            'w-full rounded-xl pl-10 pr-4 py-3 backdrop-blur-sm resize-none min-h-[100px]',
-            'bg-white/5 border border-white/10 text-white placeholder:text-white/30',
+            'w-full rounded-xl pl-10 pr-4 py-3 resize-none min-h-[100px]',
+            'bg-surface-overlay border border-border text-text-primary placeholder:text-text-muted',
             'transition-all duration-200 outline-none',
-            'focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/50',
+            'focus:border-accent/40 focus:ring-1 focus:ring-accent/30',
             imageBase64 ? 'opacity-40 cursor-not-allowed' : '',
           ].join(' ')}
         />
@@ -181,7 +181,7 @@ export function SmartEntry({ onParsed }: SmartEntryProps) {
 
       {/* Error */}
       {error && (
-        <div className="flex items-start gap-2 text-red-400 text-sm bg-red-500/10 rounded-xl p-3 border border-red-500/20">
+        <div className="flex items-start gap-2 text-status-danger text-sm bg-status-danger/10 rounded-xl p-3 border border-status-danger/20">
           <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
           <span>{error}</span>
         </div>

@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useSubscriptions } from '@/hooks/use-subscriptions'
 import { GlassButton } from '@/components/glass/glass-button'
 import { GlassCard } from '@/components/glass/glass-card'
 import { SubscriptionCard } from '@/components/subscriptions/subscription-card'
 import { AddSubscriptionModal } from '@/components/subscriptions/add-subscription-modal'
+import { DEFAULT_CATEGORY_OPTIONS } from '@/lib/constants/subscriptions'
 import type { SubscriptionStatus } from '@/types'
 
 const statusFilters: Array<{ label: string; value: SubscriptionStatus | 'all' }> = [
@@ -17,17 +18,22 @@ const statusFilters: Array<{ label: string; value: SubscriptionStatus | 'all' }>
   { label: 'Cancelled', value: 'cancelled' },
 ]
 
-const categoryFilters = [
-  'All', 'Streaming', 'Music', 'Productivity',
-  'Cloud', 'Gaming', 'Fitness', 'News', 'Other',
-]
-
 export default function SubscriptionsPage() {
   const { subscriptions, loading, error, refetch } = useSubscriptions()
   const [modalOpen, setModalOpen] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<SubscriptionStatus | 'all'>('all')
   const [categoryFilter, setCategoryFilter] = useState('All')
+
+  const categoryFilters = useMemo(() => {
+    const configured = DEFAULT_CATEGORY_OPTIONS.map((category) => category.value)
+    const dynamic = subscriptions.map((subscription) => subscription.category.toLowerCase())
+    return [
+      'All',
+      ...new Set([...configured, ...dynamic]),
+    ]
+  }, [subscriptions])
 
   const filtered = subscriptions.filter((sub) => {
     if (statusFilter !== 'all' && sub.status !== statusFilter) return false
@@ -39,16 +45,22 @@ export default function SubscriptionsPage() {
   async function handleCreate(data: Record<string, unknown>) {
     try {
       setSubmitLoading(true)
+      setSubmitError(null)
       const res = await fetch('/api/subscriptions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
-      if (!res.ok) throw new Error('Failed to create subscription')
+      if (!res.ok) {
+        const payload = await res.json().catch(() => null) as { error?: unknown } | null
+        throw new Error(typeof payload?.error === 'string' ? payload.error : 'Failed to create subscription')
+      }
       setModalOpen(false)
       await refetch()
-    } catch {
-      // Error state could be enhanced later
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : 'Failed to create subscription'
+      )
     } finally {
       setSubmitLoading(false)
     }
@@ -57,7 +69,7 @@ export default function SubscriptionsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Subscriptions</h1>
+        <h1 className="font-display text-2xl text-text-primary">Subscriptions</h1>
         <GlassButton variant="primary" onClick={() => setModalOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
           Add Subscription
@@ -67,6 +79,7 @@ export default function SubscriptionsPage() {
       <FilterBar
         statusFilter={statusFilter}
         onStatusChange={setStatusFilter}
+        categoryFilters={categoryFilters}
         categoryFilter={categoryFilter}
         onCategoryChange={setCategoryFilter}
       />
@@ -74,11 +87,11 @@ export default function SubscriptionsPage() {
       {error && (
         <GlassCard hover={false}>
           <div className="flex items-center justify-between py-2">
-            <p className="text-red-400 text-sm">{error}</p>
+            <p className="text-status-danger text-sm">{error}</p>
             <button
               type="button"
               onClick={() => refetch()}
-              className="min-h-[44px] rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/70 transition-all hover:bg-white/10 hover:text-white"
+              className="min-h-[44px] rounded-lg border border-border bg-surface-overlay px-4 py-2 text-sm font-medium text-text-secondary transition-all hover:bg-surface-subtle hover:text-text-primary"
             >
               Retry
             </button>
@@ -100,19 +113,24 @@ export default function SubscriptionsPage() {
 
       <AddSubscriptionModal
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {
+          setModalOpen(false)
+          setSubmitError(null)
+        }}
         onSubmit={handleCreate}
         loading={submitLoading}
+        error={submitError}
       />
     </div>
   )
 }
 
 function FilterBar({
-  statusFilter, onStatusChange, categoryFilter, onCategoryChange,
+  statusFilter, onStatusChange, categoryFilters, categoryFilter, onCategoryChange,
 }: {
   statusFilter: SubscriptionStatus | 'all'
   onStatusChange: (v: SubscriptionStatus | 'all') => void
+  categoryFilters: string[]
   categoryFilter: string
   onCategoryChange: (v: string) => void
 }) {
@@ -125,10 +143,10 @@ function FilterBar({
             type="button"
             onClick={() => onStatusChange(f.value)}
             className={[
-              'min-h-[44px] px-4 py-2 rounded-full text-sm font-medium transition-all',
+              'min-h-[44px] px-4 py-2 rounded-lg text-sm font-medium transition-all',
               statusFilter === f.value
-                ? 'bg-white/15 text-white border border-white/20'
-                : 'bg-white/5 text-white/50 hover:text-white/80 border border-transparent',
+                ? 'bg-surface-subtle text-text-primary border border-border'
+                : 'bg-transparent text-text-tertiary hover:text-text-secondary border border-transparent',
             ].join(' ')}
           >
             {f.label}
@@ -142,13 +160,18 @@ function FilterBar({
             type="button"
             onClick={() => onCategoryChange(c)}
             className={[
-              'min-h-[44px] px-3 py-1.5 rounded-full text-xs font-medium transition-all',
+              'min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
               categoryFilter === c
-                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/20'
-                : 'bg-white/5 text-white/40 hover:text-white/60 border border-transparent',
+                ? 'bg-accent/15 text-accent border border-accent/20'
+                : 'bg-transparent text-text-tertiary hover:text-text-secondary border border-transparent',
             ].join(' ')}
           >
-            {c}
+            {c === 'All'
+              ? c
+              : c
+                  .split('-')
+                  .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+                  .join(' ')}
           </button>
         ))}
       </div>
@@ -163,13 +186,13 @@ function SkeletonGrid() {
         <GlassCard key={i} hover={false}>
           <div className="animate-pulse space-y-3">
             <div className="flex items-center gap-4">
-              <div className="h-11 w-11 rounded-full bg-white/10" />
+              <div className="h-11 w-11 rounded-lg bg-surface-subtle" />
               <div className="flex-1 space-y-2">
-                <div className="h-4 w-24 rounded bg-white/10" />
-                <div className="h-6 w-16 rounded bg-white/10" />
+                <div className="h-4 w-24 rounded bg-surface-subtle" />
+                <div className="h-6 w-16 rounded bg-surface-subtle" />
               </div>
             </div>
-            <div className="h-3 w-32 rounded bg-white/10" />
+            <div className="h-3 w-32 rounded bg-surface-subtle" />
           </div>
         </GlassCard>
       ))}
@@ -180,7 +203,7 @@ function SkeletonGrid() {
 function EmptyState() {
   return (
     <GlassCard hover={false}>
-      <p className="text-center text-white/50 py-12">
+      <p className="text-center text-text-tertiary py-12">
         No subscriptions yet. Add your first one!
       </p>
     </GlassCard>

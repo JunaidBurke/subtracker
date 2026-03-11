@@ -50,15 +50,15 @@ export function CategoryManager({ categories, onUpdate }: CategoryManagerProps) 
           <span
             key={category}
             className={[
-              'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5',
-              'text-xs font-medium bg-white/10 text-white/70',
+              'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5',
+              'text-xs font-medium bg-surface-subtle text-text-secondary',
             ].join(' ')}
           >
             {category}
             <button
               type="button"
               onClick={() => handleRemove(category)}
-              className="min-h-[24px] min-w-[24px] inline-flex items-center justify-center rounded-full hover:bg-white/10 text-white/40 hover:text-white/80 transition-colors"
+              className="min-h-[24px] min-w-[24px] inline-flex items-center justify-center rounded-md hover:bg-surface-overlay text-text-tertiary hover:text-text-primary transition-colors"
               aria-label={`Remove ${category}`}
             >
               <X className="h-3 w-3" />
@@ -66,7 +66,7 @@ export function CategoryManager({ categories, onUpdate }: CategoryManagerProps) 
           </span>
         ))}
         {categories.length === 0 && (
-          <p className="text-sm text-white/40">No categories yet. Add one below.</p>
+          <p className="text-sm text-text-tertiary">No categories yet. Add one below.</p>
         )}
       </div>
       <GlassInput

@@ -13,11 +13,11 @@ export function GlassPanel({ children, className = '' }: GlassPanelProps) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={[
-        'rounded-3xl border p-8 backdrop-blur-xl',
-        'bg-white/[0.03] border-white/[0.08]',
-        'shadow-[var(--shadow-glass-sm)]',
+        'rounded-xl border p-8',
+        'bg-surface-raised border-border',
+        'shadow-[var(--shadow-sm)]',
         className,
       ]
         .filter(Boolean)

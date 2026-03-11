@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { AIInsight } from '@/types'
 
-export function useInsights(type?: string) {
+export function useInsights(type?: string, limit = 20) {
   const [insights, setInsights] = useState<AIInsight[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -14,6 +14,7 @@ export function useInsights(type?: string) {
       setError(null)
       const params = new URLSearchParams()
       if (type) params.set('type', type)
+      params.set('limit', String(limit))
       const res = await fetch(`/api/insights?${params}`)
       if (!res.ok) throw new Error('Failed to fetch insights')
       const data = await res.json()
@@ -23,7 +24,7 @@ export function useInsights(type?: string) {
     } finally {
       setLoading(false)
     }
-  }, [type])
+  }, [limit, type])
 
   const markRead = useCallback(async (id: string) => {
     await fetch('/api/insights', {

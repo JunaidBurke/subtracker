@@ -8,11 +8,11 @@ interface GlassBadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: 'bg-white/10 text-white/70',
-  success: 'bg-emerald-500/20 text-emerald-400',
-  warning: 'bg-amber-500/20 text-amber-400',
-  danger: 'bg-red-500/20 text-red-400',
-  info: 'bg-blue-500/20 text-blue-400',
+  default: 'bg-surface-subtle text-text-secondary',
+  success: 'bg-status-active/15 text-status-active',
+  warning: 'bg-status-warning/15 text-status-warning',
+  danger: 'bg-status-danger/15 text-status-danger',
+  info: 'bg-status-info/15 text-status-info',
 }
 
 export function GlassBadge({
@@ -22,7 +22,7 @@ export function GlassBadge({
   return (
     <span
       className={[
-        'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium',
+        'inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-medium tracking-wide uppercase',
         variantStyles[variant],
       ].join(' ')}
     >
