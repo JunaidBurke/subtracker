@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { ensureUserInsights } from '@/lib/ai/insights'
+import { ensureUserInsights, regenerateUserInsights } from '@/lib/ai/insights'
 import { createSupabaseAdmin } from '@/lib/supabase/server'
 import { z } from 'zod'
 
@@ -13,7 +13,11 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type')
     const limit = Math.min(Number(searchParams.get('limit') || 20), 50)
 
-    await ensureUserInsights(userId)
+    try {
+      await ensureUserInsights(userId)
+    } catch (generationError) {
+      console.error('[insights-generate-on-read]', generationError)
+    }
 
     const supabase = createSupabaseAdmin()
     let query = supabase
@@ -34,6 +38,27 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('[insights-get]', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+
+export async function POST() {
+  try {
+    const { userId } = await auth()
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    const result = await regenerateUserInsights(userId)
+    return NextResponse.json(result)
+  } catch (error) {
+    console.error('[insights-post]', error)
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to refresh insights',
+      },
+      { status: 500 }
+    )
   }
 }
 

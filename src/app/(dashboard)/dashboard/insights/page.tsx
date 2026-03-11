@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { format } from 'date-fns'
+import { Loader2, Sparkles } from 'lucide-react'
 import { useInsights } from '@/hooks/use-insights'
+import { GlassButton } from '@/components/glass'
 import { GlassCard } from '@/components/glass/glass-card'
 import { InsightCard } from '@/components/insights/insight-card'
 import type { InsightType } from '@/types'
@@ -16,11 +18,33 @@ const filterTabs: Array<{ label: string; value: InsightType | undefined }> = [
 
 export default function InsightsPage() {
   const [activeFilter, setActiveFilter] = useState<InsightType | undefined>(undefined)
-  const { insights, loading, error, markRead, dismiss, refetch } = useInsights(activeFilter)
+  const { insights, loading, refreshing, error, markRead, dismiss, refetch, refresh } =
+    useInsights(activeFilter)
+  const lastRefreshed = useMemo(() => {
+    if (insights.length === 0) return null
+    return format(new Date(insights[0].created_at), 'MMM d, yyyy h:mm a')
+  }, [insights])
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl text-text-primary">AI Insights</h1>
+      <div className="flex items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="font-display text-2xl text-text-primary">AI Insights</h1>
+          <p className="text-sm text-text-tertiary">
+            Last refreshed: {lastRefreshed ?? 'Not yet'}
+          </p>
+        </div>
+        <GlassButton
+          type="button"
+          variant="primary"
+          onClick={refresh}
+          disabled={loading || refreshing}
+          className="gap-2"
+        >
+          {refreshing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+          {refreshing ? 'Refreshing...' : 'Refresh with AI'}
+        </GlassButton>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         {filterTabs.map((tab) => (

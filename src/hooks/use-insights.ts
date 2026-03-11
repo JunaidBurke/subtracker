@@ -6,6 +6,7 @@ import type { AIInsight } from '@/types'
 export function useInsights(type?: string, limit = 20) {
   const [insights, setInsights] = useState<AIInsight[]>([])
   const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const fetchInsights = useCallback(async () => {
@@ -44,9 +45,37 @@ export function useInsights(type?: string, limit = 20) {
     setInsights(prev => prev.filter(i => i.id !== id))
   }, [])
 
+  const refresh = useCallback(async () => {
+    try {
+      setRefreshing(true)
+      setError(null)
+      const res = await fetch('/api/insights', { method: 'POST' })
+      const payload = await res.json()
+      if (!res.ok) {
+        throw new Error(
+          typeof payload?.error === 'string' ? payload.error : 'Failed to refresh insights'
+        )
+      }
+      await fetchInsights()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error')
+    } finally {
+      setRefreshing(false)
+    }
+  }, [fetchInsights])
+
   useEffect(() => {
     fetchInsights()
   }, [fetchInsights])
 
-  return { insights, loading, error, markRead, dismiss, refetch: fetchInsights }
+  return {
+    insights,
+    loading,
+    refreshing,
+    error,
+    markRead,
+    dismiss,
+    refetch: fetchInsights,
+    refresh,
+  }
 }
