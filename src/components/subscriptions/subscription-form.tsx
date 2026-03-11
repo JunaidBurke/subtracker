@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
-import { Upload } from 'lucide-react'
+import { useState, useCallback } from 'react'
 import { GlassInput } from '@/components/glass/glass-input'
 import { GlassButton } from '@/components/glass/glass-button'
+import { SmartEntry } from '@/components/subscriptions/smart-entry'
 import type { Subscription, BillingCycle, SubscriptionStatus } from '@/types'
 
 interface SubscriptionFormData {
@@ -69,6 +69,26 @@ export function SubscriptionForm({
     setForm((prev) => ({ ...prev, [key]: value }))
   }
 
+  const handleParsed = useCallback((data: {
+    name: string | null
+    amount: number | null
+    currency: string | null
+    billing_cycle: BillingCycle | null
+    category: string | null
+    next_renewal: string | null
+  }) => {
+    setForm((prev) => ({
+      ...prev,
+      name: data.name ?? prev.name,
+      amount: data.amount ?? prev.amount,
+      currency: data.currency ?? prev.currency,
+      billing_cycle: data.billing_cycle ?? prev.billing_cycle,
+      category: data.category ?? prev.category,
+      next_renewal: data.next_renewal ?? prev.next_renewal,
+    }))
+    setTab('manual')
+  }, [])
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     onSubmit(form)
@@ -86,13 +106,13 @@ export function SubscriptionForm({
       </div>
 
       {tab === 'smart' ? (
-        <SmartEntryPlaceholder />
+        <SmartEntry onParsed={handleParsed} />
       ) : (
         <ManualFields form={form} update={update} />
       )}
 
       <div className="flex gap-3 pt-2">
-        <GlassButton type="submit" variant="primary" disabled={loading || tab === 'smart'}>
+        <GlassButton type="submit" variant="primary" disabled={loading}>
           {loading ? 'Saving...' : mode === 'create' ? 'Add Subscription' : 'Save Changes'}
         </GlassButton>
         <GlassButton type="button" variant="ghost" onClick={onCancel}>
@@ -119,18 +139,6 @@ function TabButton({
     >
       {children}
     </button>
-  )
-}
-
-function SmartEntryPlaceholder() {
-  return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-white/10 p-12 text-center">
-      <Upload className="h-10 w-10 text-white/30 mb-3" />
-      <p className="text-white/40 text-sm">
-        Upload a screenshot or paste receipt text
-      </p>
-      <p className="text-white/20 text-xs mt-1">Coming soon</p>
-    </div>
   )
 }
 
