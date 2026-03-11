@@ -8,6 +8,7 @@ import {
   Lightbulb,
   Settings,
 } from 'lucide-react'
+import { UserButton } from '@clerk/nextjs'
 import { NotificationBell } from '@/components/layout/notification-bell'
 
 interface NavItem {
@@ -67,14 +68,17 @@ export function Sidebar() {
         <NotificationBell />
       </div>
 
-      {/* User area placeholder */}
+      {/* User area */}
       <div className="border-t border-white/[0.08] pt-4">
         <div className="flex items-center gap-3 px-4 py-2">
-          <div className="h-8 w-8 rounded-full bg-white/10" />
-          <div className="flex flex-col">
-            <span className="text-sm text-white/70">Account</span>
-            <span className="text-xs text-white/40">Manage profile</span>
-          </div>
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: 'h-8 w-8',
+              },
+            }}
+          />
+          <span className="text-sm text-white/70">Account</span>
         </div>
       </div>
     </aside>
