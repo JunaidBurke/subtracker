@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { CheckCircle2, KeyRound, Loader2, PlugZap, Trash2 } from 'lucide-react'
 import { GlassButton } from '@/components/glass/glass-button'
 import { GlassInput } from '@/components/glass/glass-input'
-import { getDefaultModelForProvider } from '@/lib/ai/catalog'
 import type {
   AIExecutionResult,
   AIProviderCatalogItem,
@@ -39,7 +38,7 @@ function getInitialModel(
     return state.default_model
   }
 
-  return provider.models[0]?.id ?? getDefaultModelForProvider(provider.id)
+  return provider.models[0]?.id ?? ''
 }
 
 export function AIProviderManager() {

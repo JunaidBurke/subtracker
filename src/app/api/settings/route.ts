@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { DEFAULT_CATEGORIES } from '@/lib/constants/subscriptions'
-import { DEFAULT_PROVIDER_ID, getDefaultModelForProvider } from '@/lib/ai/catalog'
+import { getDefaultModelForProvider, getDefaultProviderId } from '@/lib/ai/catalog'
 import { createSupabaseAdmin } from '@/lib/supabase/server'
 import { getOrCreateUserSettings } from '@/lib/ai/settings'
 import { providerIdSchema } from '@/validators/ai-provider'
@@ -42,9 +42,10 @@ export async function PUT(request: NextRequest) {
     const body: unknown = await request.json()
     const validated = updateSettingsSchema.parse(body)
     const existing = await getOrCreateUserSettings(userId)
+    const defaultProviderId = getDefaultProviderId()
 
     const nextProvider =
-      validated.default_ai_provider ?? existing.default_ai_provider ?? DEFAULT_PROVIDER_ID
+      validated.default_ai_provider ?? existing.default_ai_provider ?? defaultProviderId
 
     const supabase = createSupabaseAdmin()
     const { data, error } = await supabase

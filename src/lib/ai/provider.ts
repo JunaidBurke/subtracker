@@ -311,6 +311,10 @@ export async function executeAIRequest(
   const providerConfig = getProviderRegistryItem(input.provider)
   const startedAt = performance.now()
 
+  if (!providerMeta || !providerConfig) {
+    throw new Error(`Unsupported AI provider: ${input.provider}`)
+  }
+
   try {
     const result =
       providerConfig?.protocol === 'anthropic'

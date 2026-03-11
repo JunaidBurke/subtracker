@@ -1,0 +1,793 @@
+{
+  "default_provider": "anthropic",
+  "providers": [
+    {
+      "id": "anthropic",
+      "label": "Anthropic",
+      "api_key_label": "Anthropic API Key",
+      "api_key_placeholder": "sk-ant-...",
+      "supports_vision": true,
+      "supports_comparison": true,
+      "protocol": "anthropic",
+      "env_key": "ANTHROPIC_API_KEY",
+      "models": [
+        {
+          "id": "claude-opus-4-1-20250805",
+          "label": "Claude Opus 4.1",
+          "description": "Anthropic's most capable model for advanced reasoning and coding.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "claude-opus-4-20250514",
+          "label": "Claude Opus 4",
+          "description": "High-capability Claude 4 model for complex workflows.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "claude-sonnet-4-20250514",
+          "label": "Claude Sonnet 4",
+          "description": "Strong all-around Claude 4 model with excellent reasoning and efficiency.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "claude-3-7-sonnet-latest",
+          "label": "Claude 3.7 Sonnet",
+          "description": "Balanced reasoning and writing quality.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 3,
+            "output_per_million": 15,
+            "pricing_note": "Static estimate based on published Anthropic pricing."
+          }
+        },
+        {
+          "id": "claude-3-5-sonnet-latest",
+          "label": "Claude 3.5 Sonnet",
+          "description": "Reliable Claude 3.5 Sonnet alias for production compatibility.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "claude-3-5-haiku-latest",
+          "label": "Claude 3.5 Haiku",
+          "description": "Fast and inexpensive for lightweight tasks.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 0.8,
+            "output_per_million": 4,
+            "pricing_note": "Static estimate based on published Anthropic pricing."
+          }
+        }
+      ]
+    },
+    {
+      "id": "openai",
+      "label": "OpenAI",
+      "api_key_label": "OpenAI API Key",
+      "api_key_placeholder": "sk-...",
+      "supports_vision": true,
+      "supports_comparison": true,
+      "protocol": "openai-compatible",
+      "env_key": "OPENAI_API_KEY",
+      "api_base_url": "https://api.openai.com/v1",
+      "models": [
+        {
+          "id": "gpt-5.1",
+          "label": "GPT-5.1",
+          "description": "Current flagship OpenAI model for coding and agentic tasks.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 1.25,
+            "output_per_million": 10,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "gpt-5",
+          "label": "GPT-5",
+          "description": "Previous flagship reasoning model with configurable effort.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 1.25,
+            "output_per_million": 10,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "gpt-5-mini",
+          "label": "GPT-5 mini",
+          "description": "Faster, lower-cost GPT-5 variant for well-defined tasks.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 0.25,
+            "output_per_million": 2,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "gpt-5-nano",
+          "label": "GPT-5 nano",
+          "description": "Fastest and cheapest GPT-5 variant for lightweight workloads.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 0.05,
+            "output_per_million": 0.4,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "gpt-4.1",
+          "label": "GPT-4.1",
+          "description": "Strong non-reasoning model with broad instruction-following ability.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 2,
+            "output_per_million": 8,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "gpt-4o-mini",
+          "label": "GPT-4o mini",
+          "description": "Fast multimodal model for cost-sensitive prompts.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 0.15,
+            "output_per_million": 0.6,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "gpt-4.1-mini",
+          "label": "GPT-4.1 mini",
+          "description": "Stronger reasoning at a moderate price.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 0.4,
+            "output_per_million": 1.6,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "gpt-4.1-nano",
+          "label": "GPT-4.1 nano",
+          "description": "Lowest-cost GPT-4.1 variant for fast classification and extraction tasks.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 0.1,
+            "output_per_million": 0.4,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "gpt-4o",
+          "label": "GPT-4o",
+          "description": "Versatile multimodal flagship outside the reasoning-focused line.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 2.5,
+            "output_per_million": 10,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "o3",
+          "label": "o3",
+          "description": "Powerful reasoning model for complex multi-step analysis.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 2,
+            "output_per_million": 8,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        },
+        {
+          "id": "o4-mini",
+          "label": "o4-mini",
+          "description": "Compact reasoning model with strong visual and coding performance.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": 1.1,
+            "output_per_million": 4.4,
+            "pricing_note": "Static estimate based on published OpenAI pricing."
+          }
+        }
+      ]
+    },
+    {
+      "id": "google",
+      "label": "Google",
+      "api_key_label": "Google AI API Key",
+      "api_key_placeholder": "AIza...",
+      "supports_vision": true,
+      "supports_comparison": true,
+      "protocol": "google",
+      "env_key": "GOOGLE_AI_API_KEY",
+      "models": [
+        {
+          "id": "gemini-2.0-flash",
+          "label": "Gemini 2.0 Flash",
+          "description": "Fast Gemini model for broad chat and extraction tasks.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "gemini-1.5-pro",
+          "label": "Gemini 1.5 Pro",
+          "description": "Higher-quality reasoning and larger context windows.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        }
+      ]
+    },
+    {
+      "id": "openrouter",
+      "label": "OpenRouter",
+      "api_key_label": "OpenRouter API Key",
+      "api_key_placeholder": "sk-or-...",
+      "supports_vision": true,
+      "supports_comparison": true,
+      "protocol": "openai-compatible",
+      "env_key": "OPENROUTER_API_KEY",
+      "api_base_url": "https://openrouter.ai/api/v1",
+      "models": [
+        {
+          "id": "openrouter/auto",
+          "label": "OpenRouter Auto",
+          "description": "Automatic routing across selected high-quality models.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing depends on the model OpenRouter ultimately selects."
+          }
+        },
+        {
+          "id": "openai/gpt-5.1",
+          "label": "OpenRouter · GPT-5.1",
+          "description": "OpenAI flagship coding and agentic model via OpenRouter.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "openai/gpt-5-mini",
+          "label": "OpenRouter · GPT-5 mini",
+          "description": "Lower-cost GPT-5 option routed through OpenRouter.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "openai/gpt-4o-mini",
+          "label": "OpenRouter · GPT-4o mini",
+          "description": "OpenAI hosted through OpenRouter.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "anthropic/claude-sonnet-4.5",
+          "label": "OpenRouter · Claude Sonnet 4.5",
+          "description": "Anthropic Claude Sonnet 4.5 routed through OpenRouter.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "anthropic/claude-opus-4.5",
+          "label": "OpenRouter · Claude Opus 4.5",
+          "description": "Anthropic Claude Opus 4.5 routed through OpenRouter.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "google/gemini-3-pro-preview",
+          "label": "OpenRouter · Gemini 3 Pro Preview",
+          "description": "Google Gemini 3 Pro Preview routed through OpenRouter.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "google/gemini-3-flash-preview",
+          "label": "OpenRouter · Gemini 3 Flash Preview",
+          "description": "Fast Gemini 3 preview model routed through OpenRouter.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "z-ai/glm-4.5",
+          "label": "OpenRouter · GLM 4.5",
+          "description": "GLM model routed through OpenRouter.",
+          "supports_vision": true,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        }
+      ]
+    },
+    {
+      "id": "minimax",
+      "label": "MiniMax",
+      "api_key_label": "MiniMax API Key",
+      "api_key_placeholder": "minimax-...",
+      "supports_vision": false,
+      "supports_comparison": true,
+      "protocol": "openai-compatible",
+      "env_key": "MINIMAX_API_KEY",
+      "api_base_url": "https://api.minimax.io/v1",
+      "models": [
+        {
+          "id": "MiniMax-M2.5",
+          "label": "MiniMax M2.5",
+          "description": "General-purpose flagship model from MiniMax.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "MiniMax-M2.5-highspeed",
+          "label": "MiniMax M2.5 Highspeed",
+          "description": "Lower-latency MiniMax variant for chat and app interactions.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "MiniMax-M2.1",
+          "label": "MiniMax M2.1",
+          "description": "Compatibility option for earlier MiniMax deployments.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        }
+      ]
+    },
+    {
+      "id": "glm",
+      "label": "GLM",
+      "api_key_label": "GLM API Key",
+      "api_key_placeholder": "glm-...",
+      "supports_vision": false,
+      "supports_comparison": true,
+      "protocol": "openai-compatible",
+      "env_key": "GLM_API_KEY",
+      "api_base_url": "https://api.z.ai/api/paas/v4",
+      "models": [
+        {
+          "id": "glm-5",
+          "label": "GLM 5",
+          "description": "Current flagship GLM model for general reasoning tasks.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "glm-4.7",
+          "label": "GLM 4.7",
+          "description": "Strong general-purpose GLM model with broad compatibility.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "glm-4.7-flash",
+          "label": "GLM 4.7 Flash",
+          "description": "Faster GLM option for lower-latency interactions.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "glm-4.6",
+          "label": "GLM 4.6",
+          "description": "Prior GLM release for compatibility with older integrations.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        }
+      ]
+    },
+    {
+      "id": "kimi",
+      "label": "Kimi",
+      "api_key_label": "Kimi API Key",
+      "api_key_placeholder": "kimi-...",
+      "supports_vision": false,
+      "supports_comparison": true,
+      "protocol": "openai-compatible",
+      "env_key": "KIMI_API_KEY",
+      "api_base_url": "https://api.moonshot.cn/v1",
+      "models": [
+        {
+          "id": "kimi-k2-thinking",
+          "label": "Kimi K2 Thinking",
+          "description": "Reasoning-oriented Kimi model for deeper analysis tasks.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "kimi-k2-thinking-turbo",
+          "label": "Kimi K2 Thinking Turbo",
+          "description": "Faster Kimi reasoning model tuned for interactive workloads.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "kimi-k2-0711-preview",
+          "label": "Kimi K2 0711 Preview",
+          "description": "Preview Kimi release exposed in Moonshot platform materials.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "moonshot-v1-8k",
+          "label": "Moonshot V1 8K",
+          "description": "Legacy Moonshot model option for compatibility.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        }
+      ]
+    },
+    {
+      "id": "groq",
+      "label": "Groq",
+      "api_key_label": "Groq API Key",
+      "api_key_placeholder": "gsk_...",
+      "supports_vision": false,
+      "supports_comparison": true,
+      "protocol": "openai-compatible",
+      "env_key": "GROQ_API_KEY",
+      "api_base_url": "https://api.groq.com/openai/v1",
+      "models": [
+        {
+          "id": "openai/gpt-oss-120b",
+          "label": "GPT-OSS 120B",
+          "description": "High-capability open-weight agentic model on Groq.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.15,
+            "output_per_million": 0.6,
+            "pricing_note": "Static estimate based on Groq pricing."
+          }
+        },
+        {
+          "id": "llama-3.3-70b-versatile",
+          "label": "Llama 3.3 70B Versatile",
+          "description": "Low-latency open model served on Groq.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.59,
+            "output_per_million": 0.79,
+            "pricing_note": "Static estimate based on Groq pricing."
+          }
+        },
+        {
+          "id": "llama-3.1-8b-instant",
+          "label": "Llama 3.1 8B Instant",
+          "description": "Very fast low-cost option for short prompts.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.05,
+            "output_per_million": 0.08,
+            "pricing_note": "Static estimate based on Groq pricing."
+          }
+        },
+        {
+          "id": "qwen/qwen3-32b",
+          "label": "Qwen3 32B",
+          "description": "Fast reasoning-capable Qwen model on Groq.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.29,
+            "output_per_million": 0.59,
+            "pricing_note": "Static estimate based on Groq pricing."
+          }
+        },
+        {
+          "id": "moonshotai/kimi-k2-instruct-0905",
+          "label": "Kimi K2 0905",
+          "description": "Preview Kimi K2 build available directly on Groq.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 1,
+            "output_per_million": 3,
+            "pricing_note": "Static estimate based on Groq pricing."
+          }
+        }
+      ]
+    },
+    {
+      "id": "together",
+      "label": "Together",
+      "api_key_label": "Together API Key",
+      "api_key_placeholder": "tsk_...",
+      "supports_vision": false,
+      "supports_comparison": true,
+      "protocol": "openai-compatible",
+      "env_key": "TOGETHER_API_KEY",
+      "api_base_url": "https://api.together.xyz/v1",
+      "models": [
+        {
+          "id": "moonshotai/Kimi-K2.5",
+          "label": "Kimi K2.5",
+          "description": "Together's recommended chat and reasoning model.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.5,
+            "output_per_million": 2.8,
+            "pricing_note": "Static estimate based on Together pricing."
+          }
+        },
+        {
+          "id": "MiniMaxAI/MiniMax-M2.5",
+          "label": "MiniMax M2.5",
+          "description": "MiniMax flagship model available on Together serverless.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.3,
+            "output_per_million": 1.2,
+            "pricing_note": "Static estimate based on Together pricing."
+          }
+        },
+        {
+          "id": "zai-org/GLM-5",
+          "label": "GLM 5",
+          "description": "Latest GLM model available on Together.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "zai-org/GLM-4.5-Air-FP8",
+          "label": "GLM 4.5 Air FP8",
+          "description": "Lower-latency GLM variant on Together.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "moonshotai/Kimi-K2-Instruct-0905",
+          "label": "Kimi K2 Instruct 0905",
+          "description": "Instruction-tuned Kimi K2 model on Together.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "moonshotai/Kimi-K2-Thinking",
+          "label": "Kimi K2 Thinking",
+          "description": "Reasoning-focused Kimi K2 model on Together.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "openai/gpt-oss-120b",
+          "label": "GPT-OSS 120B",
+          "description": "OpenAI open-weight model served through Together.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+          "label": "Llama 3.3 70B Turbo",
+          "description": "Strong open model for general chat tasks.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        },
+        {
+          "id": "Qwen/Qwen3.5-397B-A17B",
+          "label": "Qwen 3.5 397B",
+          "description": "Large frontier-style Qwen model on Together.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": null,
+            "output_per_million": null,
+            "pricing_note": "Pricing estimate unavailable for this model."
+          }
+        }
+      ]
+    },
+    {
+      "id": "xai",
+      "label": "xAI",
+      "api_key_label": "xAI API Key",
+      "api_key_placeholder": "xai-...",
+      "supports_vision": false,
+      "supports_comparison": true,
+      "protocol": "openai-compatible",
+      "env_key": "XAI_API_KEY",
+      "api_base_url": "https://api.x.ai/v1",
+      "models": [
+        {
+          "id": "grok-4-1-fast-reasoning",
+          "label": "Grok 4.1 Fast Reasoning",
+          "description": "Current fast reasoning model highlighted on xAI API.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.2,
+            "output_per_million": 0.5,
+            "pricing_note": "Static estimate based on xAI pricing."
+          }
+        },
+        {
+          "id": "grok-4-1-fast-non-reasoning",
+          "label": "Grok 4.1 Fast Non-Reasoning",
+          "description": "Fast non-reasoning Grok 4.1 variant for chat and tool use.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.2,
+            "output_per_million": 0.5,
+            "pricing_note": "Static estimate based on xAI pricing."
+          }
+        },
+        {
+          "id": "grok-4-fast-reasoning",
+          "label": "Grok 4 Fast Reasoning",
+          "description": "Cost-efficient Grok 4 reasoning model on xAI.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.2,
+            "output_per_million": 0.5,
+            "pricing_note": "Static estimate based on xAI pricing."
+          }
+        },
+        {
+          "id": "grok-4-fast-non-reasoning",
+          "label": "Grok 4 Fast Non-Reasoning",
+          "description": "Cost-efficient Grok 4 non-reasoning variant.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.2,
+            "output_per_million": 0.5,
+            "pricing_note": "Static estimate based on xAI pricing."
+          }
+        },
+        {
+          "id": "grok-code-fast-1",
+          "label": "Grok Code Fast 1",
+          "description": "Fast xAI coding model for agentic development tasks.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 0.2,
+            "output_per_million": 1.5,
+            "pricing_note": "Static estimate based on xAI pricing."
+          }
+        },
+        {
+          "id": "grok-4",
+          "label": "Grok 4",
+          "description": "High-capability flagship Grok model from xAI.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 3,
+            "output_per_million": 15,
+            "pricing_note": "Static estimate based on xAI pricing."
+          }
+        },
+        {
+          "id": "grok-3",
+          "label": "Grok 3",
+          "description": "Legacy Grok 3 model retained for compatibility with older integrations.",
+          "supports_vision": false,
+          "pricing": {
+            "input_per_million": 3,
+            "output_per_million": 15,
+            "pricing_note": "Static estimate based on xAI pricing."
+          }
+        }
+      ]
+    }
+  ]
+}

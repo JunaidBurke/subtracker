@@ -1,6 +1,6 @@
 import { createSupabaseAdmin } from '@/lib/supabase/server'
 import {
-  DEFAULT_PROVIDER_ID,
+  getDefaultProviderId,
   getDefaultModelForProvider,
   isValidAIProviderId,
   listAIProviders,
@@ -35,7 +35,7 @@ export async function getOrCreateUserSettings(userId: string) {
     return existingData as UserSettings
   }
 
-  const defaultProvider = DEFAULT_PROVIDER_ID
+  const defaultProvider = getDefaultProviderId()
   const { data: created, error: createError } = await supabase
     .from('user_settings')
     .insert({
