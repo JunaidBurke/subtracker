@@ -265,7 +265,9 @@ async function processUser(
 
 Deno.serve(async (_req) => {
   try {
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+      db: { schema: 'subtracker' },
+    })
 
     const { data: users, error } = await supabase
       .from('subscriptions')
