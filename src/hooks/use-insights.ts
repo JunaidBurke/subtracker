@@ -1,0 +1,49 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import type { AIInsight } from '@/types'
+
+export function useInsights(type?: string) {
+  const [insights, setInsights] = useState<AIInsight[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchInsights = useCallback(async () => {
+    try {
+      setLoading(true)
+      const params = new URLSearchParams()
+      if (type) params.set('type', type)
+      const res = await fetch(`/api/insights?${params}`)
+      if (!res.ok) return
+      const data = await res.json()
+      setInsights(data)
+    } catch {
+      // Silently fail
+    } finally {
+      setLoading(false)
+    }
+  }, [type])
+
+  const markRead = useCallback(async (id: string) => {
+    await fetch('/api/insights', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, is_read: true }),
+    })
+    setInsights(prev => prev.map(i => i.id === id ? { ...i, is_read: true } : i))
+  }, [])
+
+  const dismiss = useCallback(async (id: string) => {
+    await fetch('/api/insights', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, is_dismissed: true }),
+    })
+    setInsights(prev => prev.filter(i => i.id !== id))
+  }, [])
+
+  useEffect(() => {
+    fetchInsights()
+  }, [fetchInsights])
+
+  return { insights, loading, markRead, dismiss, refetch: fetchInsights }
+}
