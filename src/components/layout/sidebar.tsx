@@ -7,9 +7,8 @@ import {
   CreditCard,
   Lightbulb,
   Settings,
-  Bell,
 } from 'lucide-react'
-import { GlassBadge } from '@/components/glass'
+import { NotificationBell } from '@/components/layout/notification-bell'
 
 interface NavItem {
   label: string
@@ -26,7 +25,6 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const pathname = usePathname()
-  const unreadCount = 3 // placeholder
 
   return (
     <aside className="hidden md:flex flex-col w-[280px] h-screen fixed left-0 top-0 border-r border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-6">
@@ -66,16 +64,7 @@ export function Sidebar() {
 
       {/* Notification bell */}
       <div className="mb-4">
-        <button
-          type="button"
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-white/50 hover:text-white hover:bg-white/5 transition-all duration-200 w-full min-h-[44px] cursor-pointer"
-        >
-          <Bell className="h-5 w-5 shrink-0" />
-          <span>Notifications</span>
-          {unreadCount > 0 && (
-            <GlassBadge variant="info">{unreadCount}</GlassBadge>
-          )}
-        </button>
+        <NotificationBell />
       </div>
 
       {/* User area placeholder */}
