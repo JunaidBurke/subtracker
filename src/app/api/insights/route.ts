@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { ensureUserInsights } from '@/lib/ai/insights'
 import { createSupabaseAdmin } from '@/lib/supabase/server'
 import { z } from 'zod'
 
@@ -11,6 +12,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = request.nextUrl
     const type = searchParams.get('type')
     const limit = Math.min(Number(searchParams.get('limit') || 20), 50)
+
+    await ensureUserInsights(userId)
 
     const supabase = createSupabaseAdmin()
     let query = supabase
