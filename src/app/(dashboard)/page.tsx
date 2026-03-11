@@ -1,12 +1,14 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { TrendingUp, TrendingDown, Calendar, Sparkles } from 'lucide-react'
 import { differenceInDays, parseISO, format } from 'date-fns'
 import { GlassCard } from '@/components/glass'
 import { SpendDonut } from '@/components/charts/spend-donut'
 import { MonthlyTrend } from '@/components/charts/monthly-trend'
+import { AIChatInput } from '@/components/ai/ai-chat-input'
+import { AIChatResponse } from '@/components/ai/ai-chat-response'
 import { useSubscriptions } from '@/hooks/use-subscriptions'
 import {
   totalMonthlySpend,
@@ -194,11 +196,35 @@ function AIInsightsPreview() {
 
 export default function DashboardPage() {
   const { subscriptions, loading, error } = useSubscriptions()
+  const [aiResponse, setAiResponse] = useState<string | null>(null)
+  const [aiLoading, setAiLoading] = useState(false)
 
   const total = useMemo(
     () => totalMonthlySpend(subscriptions),
     [subscriptions]
   )
+
+  const handleAiQuery = useCallback(async (question: string) => {
+    setAiLoading(true)
+    setAiResponse(null)
+    try {
+      const res = await fetch('/api/ai/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question }),
+      })
+      const data = (await res.json()) as { response?: string; error?: string }
+      if (!res.ok) {
+        setAiResponse(data.error ?? 'Something went wrong. Please try again.')
+        return
+      }
+      setAiResponse(data.response ?? null)
+    } catch {
+      setAiResponse('Failed to reach the AI service. Please try again.')
+    } finally {
+      setAiLoading(false)
+    }
+  }, [])
 
   if (loading) {
     return (
@@ -231,6 +257,13 @@ export default function DashboardPage() {
       </div>
       <div className="md:col-span-2">
         <AIInsightsPreview />
+      </div>
+      <div className="md:col-span-2 space-y-3">
+        <AIChatResponse
+          response={aiResponse}
+          onDismiss={() => setAiResponse(null)}
+        />
+        <AIChatInput onSubmit={handleAiQuery} loading={aiLoading} />
       </div>
     </div>
   )
