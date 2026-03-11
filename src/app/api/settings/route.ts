@@ -1,19 +1,11 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { DEFAULT_CATEGORIES } from '@/lib/constants/subscriptions'
+import { DEFAULT_PROVIDER_ID, getDefaultModelForProvider } from '@/lib/ai/catalog'
 import { createSupabaseAdmin } from '@/lib/supabase/server'
+import { getOrCreateUserSettings } from '@/lib/ai/settings'
+import { providerIdSchema } from '@/validators/ai-provider'
 import { z } from 'zod'
-
-const DEFAULT_CATEGORIES = [
-  'streaming',
-  'dev-tools',
-  'productivity',
-  'entertainment',
-  'cloud',
-  'finance',
-  'health',
-  'education',
-  'other',
-]
 
 const updateSettingsSchema = z.object({
   email_digest: z.boolean().optional(),
@@ -21,37 +13,19 @@ const updateSettingsSchema = z.object({
   in_app_alerts: z.boolean().optional(),
   currency: z.string().length(3).optional(),
   categories: z.array(z.string().min(1).max(50)).optional(),
+  default_ai_provider: providerIdSchema.optional(),
+  default_ai_model: z.string().min(1).max(120).optional(),
 })
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     const { userId } = await auth()
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = createSupabaseAdmin()
-    const { data: existingData, error } = await supabase
-      .from('user_settings')
-      .select('id, user_id, email_digest, email_alerts, in_app_alerts, currency, categories')
-      .eq('user_id', userId)
-      .single()
-
-    if (error || !existingData) {
-      const { data: newSettings, error: createError } = await supabase
-        .from('user_settings')
-        .insert({
-          user_id: userId,
-          categories: DEFAULT_CATEGORIES,
-        })
-        .select('id, user_id, email_digest, email_alerts, in_app_alerts, currency, categories')
-        .single()
-
-      if (createError) throw createError
-      return NextResponse.json(newSettings)
-    }
-
-    return NextResponse.json(existingData)
+    const settings = await getOrCreateUserSettings(userId)
+    return NextResponse.json(settings)
   } catch (error) {
     console.error('[settings-get]', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -67,13 +41,30 @@ export async function PUT(request: NextRequest) {
 
     const body: unknown = await request.json()
     const validated = updateSettingsSchema.parse(body)
+    const existing = await getOrCreateUserSettings(userId)
+
+    const nextProvider =
+      validated.default_ai_provider ?? existing.default_ai_provider ?? DEFAULT_PROVIDER_ID
 
     const supabase = createSupabaseAdmin()
     const { data, error } = await supabase
       .from('user_settings')
-      .update(validated)
-      .eq('user_id', userId)
-      .select('id, user_id, email_digest, email_alerts, in_app_alerts, currency, categories')
+      .upsert(
+        {
+          user_id: userId,
+          categories: validated.categories ?? existing.categories ?? DEFAULT_CATEGORIES,
+          default_ai_provider: nextProvider,
+          default_ai_model:
+            validated.default_ai_model ??
+            existing.default_ai_model ??
+            getDefaultModelForProvider(nextProvider),
+          ...validated,
+        },
+        { onConflict: 'user_id' }
+      )
+      .select(
+        'id, user_id, email_digest, email_alerts, in_app_alerts, currency, categories, default_ai_provider, default_ai_model'
+      )
       .single()
 
     if (error) throw error

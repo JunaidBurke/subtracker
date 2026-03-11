@@ -3,6 +3,7 @@ export type SubscriptionStatus = 'active' | 'paused' | 'cancelled' | 'trial'
 export type InsightType = 'optimization' | 'forecast' | 'alert'
 export type NotificationType = 'renewal_reminder' | 'price_change' | 'digest' | 'insight'
 export type NotificationChannel = 'in_app' | 'email'
+export type AIProviderId = string
 
 export interface Subscription {
   id: string
@@ -77,4 +78,67 @@ export interface UserSettings {
   in_app_alerts: boolean
   currency: string
   categories: string[]
+  default_ai_provider: AIProviderId
+  default_ai_model: string
+}
+
+export interface AIModelPricing {
+  input_per_million: number | null
+  output_per_million: number | null
+  pricing_note?: string
+}
+
+export interface AIModelCatalogItem {
+  id: string
+  label: string
+  description: string
+  supports_vision: boolean
+  pricing: AIModelPricing
+}
+
+export interface AIProviderCatalogItem {
+  id: AIProviderId
+  label: string
+  api_key_label: string
+  api_key_placeholder: string
+  supports_vision: boolean
+  supports_comparison: boolean
+  models: AIModelCatalogItem[]
+}
+
+export interface AIProviderCredentialSummary {
+  provider: AIProviderId
+  has_key: boolean
+  key_hint: string | null
+  saved_at: string | null
+}
+
+export interface AIProviderSettingsPayload {
+  providers: AIProviderCatalogItem[]
+  credentials: AIProviderCredentialSummary[]
+  default_provider: AIProviderId
+  default_model: string
+}
+
+export interface AIRequestSelection {
+  provider: AIProviderId
+  model: string
+}
+
+export interface AIUsageMetrics {
+  input_tokens: number | null
+  output_tokens: number | null
+  total_tokens: number | null
+  estimated_cost_usd: number | null
+  cost_note: string
+}
+
+export interface AIExecutionResult {
+  provider: AIProviderId
+  provider_label: string
+  model: string
+  latency_ms: number
+  output_text: string
+  usage: AIUsageMetrics
+  error: string | null
 }

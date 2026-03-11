@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { GlassPanel } from '@/components/glass/glass-panel'
 import { NotificationPrefs } from '@/components/settings/notification-prefs'
 import { CategoryManager } from '@/components/settings/category-manager'
+import { AIProviderManager } from '@/components/settings/ai-provider-manager'
 import type { UserSettings } from '@/types'
 
 const CURRENCIES = [
@@ -28,6 +29,7 @@ export default function SettingsPage() {
         if (!res.ok) throw new Error('Failed to load settings')
         const data: UserSettings = await res.json()
         setSettings(data)
+        setError('')
       } catch {
         setError('Failed to load settings')
       } finally {
@@ -35,6 +37,10 @@ export default function SettingsPage() {
       }
     }
     fetchSettings()
+
+    return () => {
+      if (saveTimeout.current) clearTimeout(saveTimeout.current)
+    }
   }, [])
 
   const saveSettings = useCallback(async (updates: Partial<UserSettings>) => {
@@ -48,6 +54,7 @@ export default function SettingsPage() {
       if (!res.ok) throw new Error('Failed to save')
       const data: UserSettings = await res.json()
       setSettings(data)
+      setError('')
     } catch {
       setError('Failed to save settings')
     } finally {
@@ -87,9 +94,9 @@ export default function SettingsPage() {
   if (error && !settings) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-white">Settings</h1>
+        <h1 className="font-display text-2xl text-text-primary">Settings</h1>
         <GlassPanel>
-          <p className="text-red-400 text-sm text-center py-8">{error}</p>
+          <p className="text-status-danger text-sm text-center py-8">{error}</p>
         </GlassPanel>
       </div>
     )
@@ -100,19 +107,19 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Settings</h1>
+        <h1 className="font-display text-2xl text-text-primary">Settings</h1>
         {saving && (
-          <span className="text-xs text-white/40 animate-pulse">Saving...</span>
+          <span className="text-xs text-text-tertiary animate-pulse">Saving...</span>
         )}
       </div>
 
       <GlassPanel>
-        <h2 className="text-lg font-semibold text-white mb-4">Notifications</h2>
+        <h2 className="font-display text-lg text-text-primary mb-4">Notifications</h2>
         <NotificationPrefs settings={settings} onUpdate={handleNotificationUpdate} />
       </GlassPanel>
 
       <GlassPanel>
-        <h2 className="text-lg font-semibold text-white mb-4">Categories</h2>
+        <h2 className="font-display text-lg text-text-primary mb-4">Categories</h2>
         <CategoryManager
           categories={settings.categories}
           onUpdate={handleCategoryUpdate}
@@ -120,7 +127,12 @@ export default function SettingsPage() {
       </GlassPanel>
 
       <GlassPanel>
-        <h2 className="text-lg font-semibold text-white mb-4">Currency</h2>
+        <h2 className="font-display text-lg text-text-primary mb-4">AI Providers</h2>
+        <AIProviderManager />
+      </GlassPanel>
+
+      <GlassPanel>
+        <h2 className="font-display text-lg text-text-primary mb-4">Currency</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
           {CURRENCIES.map(({ code, label }) => (
             <button
@@ -128,11 +140,11 @@ export default function SettingsPage() {
               type="button"
               onClick={() => handleCurrencyChange(code)}
               className={[
-                'min-h-[44px] px-4 py-3 rounded-xl text-sm font-medium',
+                'min-h-[44px] px-4 py-3 rounded-lg text-sm font-medium',
                 'transition-all duration-200 text-left',
                 settings.currency === code
-                  ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30 shadow-[0_0_12px_rgba(59,130,246,0.15)]'
-                  : 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10 hover:text-white/80',
+                  ? 'bg-accent/15 text-accent border border-accent/20 shadow-[var(--shadow-accent)]'
+                  : 'bg-surface-overlay text-text-secondary border border-border hover:bg-surface-subtle hover:text-text-primary',
               ].join(' ')}
             >
               {label}
@@ -147,13 +159,13 @@ export default function SettingsPage() {
 function SettingsSkeleton() {
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-white">Settings</h1>
-      {Array.from({ length: 3 }).map((_, i) => (
+      <h1 className="font-display text-2xl text-text-primary">Settings</h1>
+      {Array.from({ length: 4 }).map((_, i) => (
         <GlassPanel key={i}>
           <div className="animate-pulse space-y-4">
-            <div className="h-5 w-28 rounded bg-white/10" />
-            <div className="h-10 w-full rounded bg-white/10" />
-            <div className="h-10 w-3/4 rounded bg-white/10" />
+            <div className="h-5 w-28 rounded bg-surface-subtle" />
+            <div className="h-10 w-full rounded bg-surface-subtle" />
+            <div className="h-10 w-3/4 rounded bg-surface-subtle" />
           </div>
         </GlassPanel>
       ))}

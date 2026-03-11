@@ -1,15 +1,16 @@
 'use client'
 
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { TrendingUp, TrendingDown, Calendar, Sparkles } from 'lucide-react'
 import { differenceInDays, parseISO, format } from 'date-fns'
 import { GlassCard } from '@/components/glass'
 import { SpendDonut } from '@/components/charts/spend-donut'
 import { MonthlyTrend } from '@/components/charts/monthly-trend'
-import { AIChatInput } from '@/components/ai/ai-chat-input'
-import { AIChatResponse } from '@/components/ai/ai-chat-response'
+import { AIWorkbench } from '@/components/ai/ai-workbench'
+import { InsightCard } from '@/components/insights/insight-card'
 import { useSubscriptions } from '@/hooks/use-subscriptions'
+import { useInsights } from '@/hooks/use-insights'
 import {
   totalMonthlySpend,
   calculateMonthlyAmount,
@@ -19,10 +20,10 @@ import type { Subscription } from '@/types'
 function SkeletonCard({ className = '' }: { className?: string }) {
   return (
     <div
-      className={`animate-pulse rounded-2xl border border-white/10 bg-white/5 p-6 ${className}`}
+      className={`animate-pulse rounded-xl border border-border bg-surface-raised p-6 ${className}`}
     >
-      <div className="mb-3 h-4 w-24 rounded bg-white/10" />
-      <div className="h-8 w-32 rounded bg-white/10" />
+      <div className="mb-3 h-4 w-24 rounded bg-surface-subtle" />
+      <div className="h-8 w-32 rounded bg-surface-subtle" />
     </div>
   )
 }
@@ -31,11 +32,11 @@ function EmptyState() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
       <GlassCard className="max-w-md text-center" hover={false}>
-        <div className="mb-4 text-4xl">+</div>
-        <h2 className="mb-2 text-xl font-semibold text-white">
+        <div className="mb-4 font-display text-4xl text-accent">+</div>
+        <h2 className="mb-2 font-display text-xl text-text-primary">
           No subscriptions yet
         </h2>
-        <p className="text-sm text-white/60">
+        <p className="text-sm text-text-secondary">
           Add your first subscription to see your dashboard come to life.
         </p>
       </GlassCard>
@@ -46,26 +47,27 @@ function EmptyState() {
 function SpendCard({ total }: { total: number }) {
   return (
     <GlassCard hover={false} className="col-span-1">
-      <p className="mb-1 text-sm text-white/60">Total Monthly Spend</p>
+      <p className="mb-1 text-sm text-text-tertiary">Total Monthly Spend</p>
       <motion.p
-        className="text-3xl font-bold text-white"
+        className="font-display text-3xl text-text-primary"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.8 }}
       >
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-accent"
         >
           ${total.toFixed(2)}
         </motion.span>
       </motion.p>
-      <div className="mt-2 flex items-center gap-1 text-sm text-white/50">
+      <div className="mt-3 flex items-center gap-1.5 text-sm text-text-tertiary">
         {total > 0 ? (
-          <TrendingUp className="h-4 w-4 text-emerald-400" />
+          <TrendingUp className="h-4 w-4 text-status-active" />
         ) : (
-          <TrendingDown className="h-4 w-4 text-white/30" />
+          <TrendingDown className="h-4 w-4 text-text-muted" />
         )}
         <span>per month</span>
       </div>
@@ -93,8 +95,8 @@ function NextRenewalCard({
   if (!nextRenewal) {
     return (
       <GlassCard hover={false}>
-        <p className="mb-1 text-sm text-white/60">Next Renewal</p>
-        <p className="text-sm text-white/40">No upcoming renewals</p>
+        <p className="mb-1 text-sm text-text-tertiary">Next Renewal</p>
+        <p className="text-sm text-text-muted">No upcoming renewals</p>
       </GlassCard>
     )
   }
@@ -106,12 +108,12 @@ function NextRenewalCard({
 
   return (
     <GlassCard hover={false}>
-      <p className="mb-1 text-sm text-white/60">Next Renewal</p>
-      <p className="text-lg font-semibold text-white">{nextRenewal.name}</p>
-      <p className="text-2xl font-bold text-white">
+      <p className="mb-1 text-sm text-text-tertiary">Next Renewal</p>
+      <p className="text-lg font-medium text-text-primary">{nextRenewal.name}</p>
+      <p className="font-display text-2xl text-accent">
         ${calculateMonthlyAmount(nextRenewal).toFixed(2)}
       </p>
-      <div className="mt-2 flex items-center gap-1 text-sm text-white/50">
+      <div className="mt-3 flex items-center gap-1.5 text-sm text-text-tertiary">
         <Calendar className="h-4 w-4" />
         <span>
           {daysUntil === 0
@@ -148,11 +150,11 @@ function UpcomingRenewals({
 
   return (
     <GlassCard hover={false}>
-      <h3 className="mb-4 text-lg font-semibold text-white">
+      <h3 className="mb-4 font-display text-lg text-text-primary">
         Upcoming Renewals
       </h3>
       {upcoming.length === 0 ? (
-        <p className="text-sm text-white/50">
+        <p className="text-sm text-text-tertiary">
           No renewals in the next 7 days.
         </p>
       ) : (
@@ -160,15 +162,15 @@ function UpcomingRenewals({
           {upcoming.map((sub) => (
             <li
               key={sub.id}
-              className="flex items-center justify-between border-b border-white/5 pb-3 last:border-0"
+              className="flex items-center justify-between border-b border-border pb-3 last:border-0"
             >
               <div>
-                <p className="text-sm font-medium text-white">{sub.name}</p>
-                <p className="text-xs text-white/50">
+                <p className="text-sm font-medium text-text-primary">{sub.name}</p>
+                <p className="text-xs text-text-tertiary">
                   {format(parseISO(sub.next_renewal), 'MMM d')}
                 </p>
               </div>
-              <p className="text-sm font-semibold text-white">
+              <p className="text-sm font-semibold text-accent">
                 ${sub.amount.toFixed(2)}
               </p>
             </li>
@@ -180,51 +182,51 @@ function UpcomingRenewals({
 }
 
 function AIInsightsPreview() {
+  const { insights, loading, markRead, dismiss } = useInsights(undefined, 2)
+
   return (
     <GlassCard glow hover={false}>
       <div className="flex items-center gap-2">
-        <Sparkles className="h-5 w-5 text-purple-400" />
-        <h3 className="text-lg font-semibold text-white">AI Insights</h3>
+        <Sparkles className="h-5 w-5 text-accent" />
+        <h3 className="font-display text-lg text-text-primary">AI Insights</h3>
       </div>
-      <p className="mt-2 text-sm text-white/50">
-        No insights yet. Add subscriptions to unlock AI-powered
-        recommendations.
-      </p>
+      {loading ? (
+        <div className="mt-4 space-y-3">
+          {Array.from({ length: 2 }).map((_, index) => (
+            <div
+              key={index}
+              className="h-24 animate-pulse rounded-xl border border-border bg-surface-overlay"
+            />
+          ))}
+        </div>
+      ) : insights.length === 0 ? (
+        <p className="mt-2 text-sm text-text-secondary">
+          No insights yet. Add subscriptions to unlock AI-powered
+          recommendations.
+        </p>
+      ) : (
+        <div className="mt-4 space-y-3">
+          {insights.map((insight) => (
+            <InsightCard
+              key={insight.id}
+              insight={insight}
+              onDismiss={dismiss}
+              onMarkRead={markRead}
+            />
+          ))}
+        </div>
+      )}
     </GlassCard>
   )
 }
 
 export default function DashboardPage() {
   const { subscriptions, loading, error } = useSubscriptions()
-  const [aiResponse, setAiResponse] = useState<string | null>(null)
-  const [aiLoading, setAiLoading] = useState(false)
 
   const total = useMemo(
     () => totalMonthlySpend(subscriptions),
     [subscriptions]
   )
-
-  const handleAiQuery = useCallback(async (question: string) => {
-    setAiLoading(true)
-    setAiResponse(null)
-    try {
-      const res = await fetch('/api/ai/query', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
-      })
-      const data = (await res.json()) as { response?: string; error?: string }
-      if (!res.ok) {
-        setAiResponse(data.error ?? 'Something went wrong. Please try again.')
-        return
-      }
-      setAiResponse(data.response ?? null)
-    } catch {
-      setAiResponse('Failed to reach the AI service. Please try again.')
-    } finally {
-      setAiLoading(false)
-    }
-  }, [])
 
   if (loading) {
     return (
@@ -242,11 +244,11 @@ export default function DashboardPage() {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
         <GlassCard className="max-w-md text-center" hover={false}>
-          <p className="mb-4 text-sm text-red-400">{error}</p>
+          <p className="mb-4 text-sm text-status-danger">{error}</p>
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="min-h-[44px] rounded-xl border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium text-white/70 transition-all hover:bg-white/10 hover:text-white"
+            className="min-h-[44px] rounded-lg border border-border bg-surface-overlay px-6 py-2 text-sm font-medium text-text-secondary transition-all hover:bg-surface-subtle hover:text-text-primary"
           >
             Retry
           </button>
@@ -271,12 +273,8 @@ export default function DashboardPage() {
       <div className="md:col-span-2">
         <AIInsightsPreview />
       </div>
-      <div className="md:col-span-2 space-y-3">
-        <AIChatResponse
-          response={aiResponse}
-          onDismiss={() => setAiResponse(null)}
-        />
-        <AIChatInput onSubmit={handleAiQuery} loading={aiLoading} />
+      <div className="md:col-span-2">
+        <AIWorkbench />
       </div>
     </div>
   )

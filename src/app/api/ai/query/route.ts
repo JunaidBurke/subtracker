@@ -1,14 +1,13 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { getAIProvider } from '@/lib/ai/provider'
+import { getDefaultModelForProvider } from '@/lib/ai/catalog'
+import { executeAIRequest } from '@/lib/ai/provider'
+import { getOrCreateUserSettings } from '@/lib/ai/settings'
 import { nlQueryPrompt } from '@/lib/ai/prompts'
 import { getSubscriptions } from '@/lib/supabase/queries'
 import { calculateMonthlyAmount } from '@/lib/utils/spend'
+import { aiQuerySchema } from '@/validators/ai-provider'
 import { z } from 'zod'
-
-const querySchema = z.object({
-  question: z.string().min(1).max(500),
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body: unknown = await request.json()
-    const { question } = querySchema.parse(body)
+    const { question, selection } = aiQuerySchema.parse(body)
 
     const subscriptions = await getSubscriptions(userId)
     const context = subscriptions
@@ -37,11 +36,23 @@ export async function POST(request: NextRequest) {
     ).length
 
     const fullContext = `Total monthly spend: $${totalMonthly.toFixed(2)}\nActive subscriptions: ${activeCount}\n\nSubscriptions:\n${context}`
+    const settings = await getOrCreateUserSettings(userId)
+    const provider = selection?.provider ?? settings.default_ai_provider
+    const model =
+      selection?.model ??
+      settings.default_ai_model ??
+      getDefaultModelForProvider(provider)
 
-    const ai = getAIProvider()
-    const response = await ai.analyzeText(nlQueryPrompt(fullContext, question))
+    const result = await executeAIRequest({
+      provider,
+      model,
+      userId,
+      prompt: nlQueryPrompt(fullContext, question),
+    })
 
-    return NextResponse.json({ response })
+    return NextResponse.json(result, {
+      status: result.error ? 400 : 200,
+    })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.flatten() }, { status: 400 })
