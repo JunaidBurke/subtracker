@@ -31,13 +31,13 @@ export async function GET(_request: NextRequest) {
     }
 
     const supabase = createSupabaseAdmin()
-    let { data, error } = await supabase
+    const { data: existingData, error } = await supabase
       .from('user_settings')
       .select('id, user_id, email_digest, email_alerts, in_app_alerts, currency, categories')
       .eq('user_id', userId)
       .single()
 
-    if (error || !data) {
+    if (error || !existingData) {
       const { data: newSettings, error: createError } = await supabase
         .from('user_settings')
         .insert({
@@ -48,10 +48,10 @@ export async function GET(_request: NextRequest) {
         .single()
 
       if (createError) throw createError
-      data = newSettings
+      return NextResponse.json(newSettings)
     }
 
-    return NextResponse.json(data)
+    return NextResponse.json(existingData)
   } catch (error) {
     console.error('[settings-get]', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

@@ -6,18 +6,20 @@ import type { AIInsight } from '@/types'
 export function useInsights(type?: string) {
   const [insights, setInsights] = useState<AIInsight[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const fetchInsights = useCallback(async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams()
       if (type) params.set('type', type)
       const res = await fetch(`/api/insights?${params}`)
-      if (!res.ok) return
+      if (!res.ok) throw new Error('Failed to fetch insights')
       const data = await res.json()
       setInsights(data)
-    } catch {
-      // Silently fail
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
       setLoading(false)
     }
@@ -45,5 +47,5 @@ export function useInsights(type?: string) {
     fetchInsights()
   }, [fetchInsights])
 
-  return { insights, loading, markRead, dismiss, refetch: fetchInsights }
+  return { insights, loading, error, markRead, dismiss, refetch: fetchInsights }
 }

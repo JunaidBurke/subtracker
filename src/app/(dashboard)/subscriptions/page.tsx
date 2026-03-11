@@ -72,7 +72,18 @@ export default function SubscriptionsPage() {
       />
 
       {error && (
-        <p className="text-red-400 text-sm">{error}</p>
+        <GlassCard hover={false}>
+          <div className="flex items-center justify-between py-2">
+            <p className="text-red-400 text-sm">{error}</p>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="min-h-[44px] rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/70 transition-all hover:bg-white/10 hover:text-white"
+            >
+              Retry
+            </button>
+          </div>
+        </GlassCard>
       )}
 
       {loading ? (

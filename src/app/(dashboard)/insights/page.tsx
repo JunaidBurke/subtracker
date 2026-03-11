@@ -16,7 +16,7 @@ const filterTabs: Array<{ label: string; value: InsightType | undefined }> = [
 
 export default function InsightsPage() {
   const [activeFilter, setActiveFilter] = useState<InsightType | undefined>(undefined)
-  const { insights, loading, markRead, dismiss } = useInsights(activeFilter)
+  const { insights, loading, error, markRead, dismiss, refetch } = useInsights(activeFilter)
 
   return (
     <div className="space-y-6">
@@ -42,6 +42,8 @@ export default function InsightsPage() {
 
       {loading ? (
         <SkeletonCards />
+      ) : error ? (
+        <ErrorState message={error} onRetry={refetch} />
       ) : insights.length === 0 ? (
         <EmptyState />
       ) : (
@@ -77,6 +79,23 @@ function SkeletonCards() {
         </GlassCard>
       ))}
     </div>
+  )
+}
+
+function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <GlassCard hover={false}>
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <p className="mb-4 text-sm text-red-400">{message}</p>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="min-h-[44px] rounded-xl border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium text-white/70 transition-all hover:bg-white/10 hover:text-white"
+        >
+          Retry
+        </button>
+      </div>
+    </GlassCard>
   )
 }
 
